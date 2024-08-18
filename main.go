@@ -5,11 +5,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/google/uuid"
+	"github.com/joho/godotenv"
 	_ "github.com/mattn/go-sqlite3"
 	"io/ioutil"
+	"log"
 	"math/rand"
 	"net/http"
 	"net/url"
+	"os"
 	"sync"
 	"time"
 )
@@ -25,8 +28,11 @@ type MemeResponse struct {
 }
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 	initDB()
-
 	http.Handle("/memes", authMiddleware(http.HandlerFunc(handleMemes)))
 	http.HandleFunc("/update_tokens", updateTokens)
 	http.HandleFunc("/generate_token", generateTokenHandler)
@@ -67,7 +73,7 @@ func handleMemes(w http.ResponseWriter, r *http.Request) {
 }
 
 func reverseGeocode(lat, lon string) (string, error) {
-	apiKey := "95a8208a6c3a47188b9dd50d05c86b2e"
+	apiKey := os.Getenv("GIPHY_API_KEY")
 	reqURL := fmt.Sprintf("https://api.opencagedata.com/geocode/v1/json?q=%s,%s&key=%s", lat, lon, apiKey)
 
 	resp, err := http.Get(reqURL)
@@ -106,7 +112,7 @@ func reverseGeocode(lat, lon string) (string, error) {
 }
 
 func fetchMeme(query string) (string, error) {
-	apiKey := "yV6ML6lgRWF7mO7RZiIUHjFgTBGPr1dI"
+	apiKey := os.Getenv("OPENCAGE_API_KEY")
 	reqURL := fmt.Sprintf("https://api.giphy.com/v1/gifs/search?api_key=%s&q=%s&limit=10", apiKey, url.QueryEscape(query))
 
 	resp, err := http.Get(reqURL)
