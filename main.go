@@ -73,7 +73,7 @@ func handleMemes(w http.ResponseWriter, r *http.Request) {
 }
 
 func reverseGeocode(lat, lon string) (string, error) {
-	apiKey := os.Getenv("GIPHY_API_KEY")
+	apiKey := os.Getenv("OPENCAGE_API_KEY")
 	reqURL := fmt.Sprintf("https://api.opencagedata.com/geocode/v1/json?q=%s,%s&key=%s", lat, lon, apiKey)
 
 	resp, err := http.Get(reqURL)
@@ -112,7 +112,7 @@ func reverseGeocode(lat, lon string) (string, error) {
 }
 
 func fetchMeme(query string) (string, error) {
-	apiKey := os.Getenv("OPENCAGE_API_KEY")
+	apiKey := os.Getenv("GIPHY_API_KEY")
 	reqURL := fmt.Sprintf("https://api.giphy.com/v1/gifs/search?api_key=%s&q=%s&limit=10", apiKey, url.QueryEscape(query))
 
 	resp, err := http.Get(reqURL)

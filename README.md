@@ -32,6 +32,10 @@ Ensure you have Go installed. Then, install the required Go packages:
 go mod tidy
 ```
 
+### 3. Include .env file
+
+Should be included as part of email. Otherwise, create a .env file with API tokens from Giphy and 
+
 ### 3. Run the Service
 
 You can start the service using the following command:
